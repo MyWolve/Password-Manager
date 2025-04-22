@@ -9,6 +9,7 @@ main(){
         show_menu
     done
 }
+# $6$3FxfZUzPvC/IIJ66$P.El7d85X/RxKNFbGUhC.1jFN2eb1gEvM3Ge.e9KXW9tQa9kgQsFk2VpXG3B2CRFFs/klL18WaPByeLuX4lU5/
 
 show_menu(){
     echo "Password Manager Menu: "
