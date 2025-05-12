@@ -2,14 +2,12 @@
 source src/initialize.sh
 
 main(){
-    # Main function will be implemented later
+    initialize
     while true; 
     do
-        initialize
         show_menu
     done
 }
-# $6$3FxfZUzPvC/IIJ66$P.El7d85X/RxKNFbGUhC.1jFN2eb1gEvM3Ge.e9KXW9tQa9kgQsFk2VpXG3B2CRFFs/klL18WaPByeLuX4lU5/
 
 show_menu(){
     echo "Password Manager Menu: "
@@ -23,7 +21,9 @@ show_menu(){
     read option
     case $option in
         1)
-            echo "You chose: 'Add new Password'. This feature is not yet implemented."
+            echo "You chose: 'Add new Password'. This feature is currently being implemented."
+            # encrypt_password $MASTER_PASSWORD $(generate_password)
+            new_password $MASTER_PASSWORD
             ;;
         2)
             echo "You chose: 'Retrieve Password'. This feature is not yet implemented."

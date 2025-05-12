@@ -61,6 +61,65 @@ check_master_password(){
             echo "Passwords do not match. Try again."
         fi
     done
-    #echo "$password_hash"
-    #echo "$password_salt"
+}
+
+generate_password(){
+    local passwd=$(openssl rand -base64 24)
+    echo $passwd
+}
+
+encrypt_password(){
+    local master="$1"
+    local passwd="$2"
+    local encrypted_password=$(echo "$passwd" | openssl enc -aes-256-cbc -pbkdf2 -a -iter 10000 -pass "pass:$master") 
+    echo $encrypted_password
+}
+
+new_password(){
+    local master="$1"
+    while true; do
+        echo "Please enter an account name (exit with 'q'): "
+        read user
+
+        if [ "$user" == "q" ]
+        then
+            echo "Returning to main menu..."
+            return 0
+        else
+            local account_name="$user"
+            if [ ! -d "data/passwords" ]
+            then
+                mkdir data/passwords
+            fi
+            if [ -f "data/passwords/$account_name" ]
+            then
+                echo "Account already exists, would you like to overwrite it?: (y/n)"
+                read user
+                if [ $user == 'y' ]
+                then
+                    local new_password=$(generate_password)
+                    local enc_password=$(encrypt_password $master $new_password)
+                    echo "$enc_password" > "data/passwords/$account_name"
+                    echo "Succesfully overwritten $account_name"
+                else
+                    echo "No actions taken. Returning..."
+                    continue
+                fi
+            else
+                echo "You are creating account: $account_name. Are you sure? (y/n)"
+                read user
+                if [ $user == 'y' ]
+                then
+                    local new_password=$(generate_password)
+                    local enc_password=$(encrypt_password $master $new_password)
+                    touch data/passwords/$account_name
+                    echo "$enc_password" > "data/passwords/$account_name"
+                    echo "Successfully created $account_name and stored password"
+                else
+                    echo "No actions taken. Returning..."
+                    continue
+                fi
+            fi
+        fi
+    done
 }
