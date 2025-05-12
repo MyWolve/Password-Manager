@@ -1,5 +1,6 @@
 #!/bin/bash
 source src/initialize.sh
+source src/passwords.sh
 
 main(){
     initialize
@@ -22,8 +23,7 @@ show_menu(){
     case $option in
         1)
             echo "You chose: 'Add new Password'. This feature is currently being implemented."
-            # encrypt_password $MASTER_PASSWORD $(generate_password)
-            new_password $MASTER_PASSWORD
+            new_password "$MASTER_PASSWORD"
             ;;
         2)
             echo "You chose: 'Retrieve Password'. This feature is not yet implemented."

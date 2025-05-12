@@ -63,18 +63,22 @@ check_master_password(){
     done
 }
 
+# Generate a random base64 string that is 24 bytes long
 generate_password(){
     local passwd=$(openssl rand -base64 24)
     echo $passwd
 }
 
+# Accepts two inputs as parameters, the master password, and the password to be encrypted with it
 encrypt_password(){
     local master="$1"
     local passwd="$2"
     local encrypted_password=$(echo "$passwd" | openssl enc -aes-256-cbc -pbkdf2 -a -iter 10000 -pass "pass:$master") 
+    # Outputs result of encrypted_password to terminal, so make sure you set up a local variable to catch it
     echo $encrypted_password
 }
 
+# Generates a random, encrpyted password corresponding with a provided account name and stores it
 new_password(){
     local master="$1"
     while true; do
@@ -123,3 +127,14 @@ new_password(){
         fi
     done
 }
+
+decrypt_password(){
+    local master="$1"
+    local ciphertext="$2"
+    local decrypted=$(echo "$ciphertext" | openssl enc -d -aes-256-cbc -a -pbkdf2 -iter 10000 -pass pass:"$master")
+    echo $decrypted 
+    }
+
+
+
+
