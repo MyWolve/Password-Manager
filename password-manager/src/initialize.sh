@@ -131,10 +131,57 @@ new_password(){
 decrypt_password(){
     local master="$1"
     local ciphertext="$2"
-    local decrypted=$(echo "$ciphertext" | openssl enc -d -aes-256-cbc -a -pbkdf2 -iter 10000 -pass pass:"$master")
-    echo $decrypted 
-    }
+    local decrypted=$(echo "$ciphertext" | openssl enc -d -aes-256-cbc -pbkdf2 -a -iter 10000 -pass "pass:$master")
+    if [ $? -eq 0 ]
+    then    
+        echo $decrypted
+        return 0
+    else
+        echo "Error: Failed to decrypt"
+        return 1
+    fi
+}
 
+display_password(){
+    local password="$1"
+    echo "$password"
+    read -p "Press enter to continue"
+    clear   
+}
 
-
-
+retrieve_password(){
+    local master="$1"
+    if [ -z  "$(ls data/passwords/)" ]
+    then
+        echo "No passwords available. Try creating one!"
+        return 1
+    fi
+    while true; do
+        echo "Please enter an account name: "
+        read accName
+        if [ ! -f "data/passwords/$accName" ]
+        then
+            echo "Account $accName does not exist. Try again? (y/n)"
+            read user
+            if [ $user == 'y' ]
+            then
+                continue
+            else
+                echo "Exiting..."
+                return 0
+            fi
+        else
+            local encrypted_password=$(cat data/passwords/$accName)
+            echo "$encrypted_password"
+            local decryptedPassword=$(decrypt_password "$master" "$encrypted_password")
+            if [ $? -eq 0 ]
+            then
+                display_password $decryptedPassword
+                return 0
+            else
+                echo "Failed to decrypt"
+                return 1
+            fi
+        fi
+    done
+}

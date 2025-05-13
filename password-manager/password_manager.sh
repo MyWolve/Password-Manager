@@ -22,11 +22,12 @@ show_menu(){
     read option
     case $option in
         1)
-            echo "You chose: 'Add new Password'. This feature is currently being implemented."
+            echo "You chose: 'Add new Password'."
             new_password "$MASTER_PASSWORD"
             ;;
         2)
-            echo "You chose: 'Retrieve Password'. This feature is not yet implemented."
+            echo "You chose: 'Retrieve Password'."
+            retrieve_password "$MASTER_PASSWORD"
             ;;
         3)
             echo "You chose: 'List Accounts'. This feature is not yet implemented."
