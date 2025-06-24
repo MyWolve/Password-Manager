@@ -1,6 +1,7 @@
 #!/bin/bash
 source src/initialize.sh
 source src/passwords.sh
+source src/utils.sh
 
 main(){
     initialize
@@ -30,7 +31,8 @@ show_menu(){
             retrieve_password "$MASTER_PASSWORD"
             ;;
         3)
-            echo "You chose: 'List Accounts'. This feature is not yet implemented."
+            echo "You chose: 'List Accounts'."
+            list_accounts
             ;;
         4)
             echo "Exiting..."
