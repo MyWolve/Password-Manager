@@ -1,4 +1,4 @@
 # Encrypted Password directory and Master
-.MASTER 
-~/passwords/
+.MASTER
+~/passwords/*
 
