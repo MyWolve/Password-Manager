@@ -9,5 +9,5 @@ I was only required to complete a subset of features (particularly the Cryptogra
 What's next:
 * Implement main() function for better readability, ease-of-use of program
 * Case Sensitivity for account generation
-* Secure removal / deletion of passwords
+* ~~Secure removal / deletion of passwords~~ ✅
 * Change Master Password (Decrypt and then Re-encrypt passwords securely)
