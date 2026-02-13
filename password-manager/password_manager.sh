@@ -16,7 +16,8 @@ show_menu(){
     echo "1. Add new Password"
     echo "2. Retrieve Password"
     echo "3. List Accounts"
-    echo "4. Exit"
+    echo "4. Delete Account"
+    echo "5. Exit"
 
     echo -n "Please select an option (1-4): "
 
@@ -35,6 +36,10 @@ show_menu(){
             list_accounts
             ;;
         4)
+            echo "You chose: 'Delete Account'."
+            delete_account
+            ;;
+        5)
             echo "Exiting..."
             exit 0
             ;;

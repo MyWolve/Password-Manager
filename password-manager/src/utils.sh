@@ -132,3 +132,44 @@ retrieve_password(){
         fi
     done
 }
+
+delete_account(){
+    if [ -z "$(ls data/passwords/)" ]
+    then
+        echo "You don't have any accounts to delete. Consider creating one!"
+        return 1
+    fi
+    while true; do
+        echo "Please enter an account name: (enter 'q' to exit)"
+        read accName
+        if [ $accName == 'q' ]
+        then
+            echo "Exiting..."
+            return 0
+        else
+            if [ ! -f "data/passwords/$accName" ]
+            then
+                echo "Account $accName does not exist. Try again? (y/n)"
+                read user
+                if [ $user == 'y' ]
+                then
+                    continue
+                else
+                    echo "Exiting..."
+                    return 0
+                fi
+            else
+                echo "Account $accName found. Are you sure you want to delete it? (y/n)"
+                read user
+                if [ $user == 'y' ]
+                then
+                    echo "Deleting $accName..."
+                    rm data/passwords/$accName
+                else
+                    echo "Exiting..."
+                    return 0
+                fi
+            fi
+        fi
+    done
+}
