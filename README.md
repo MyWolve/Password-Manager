@@ -11,4 +11,4 @@ What's next:
 * Case Sensitivity for account generation
 * ~~Secure removal / deletion of passwords~~ ✅
 * Change Master Password (Decrypt and then Re-encrypt passwords securely)
-* Automatic clipboard cleansing
+* ~~Automatic clipboard cleansing~~ ✅
