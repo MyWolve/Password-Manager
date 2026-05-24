@@ -88,11 +88,34 @@ decrypt_password(){
     fi
 }
 
+_clipboard(){
+    local text="${1:-}"
+    case "$(uname -s)" in
+        Darwin)
+            printf "%s" "$text" | pbcopy ;;
+        Linux)
+            if grep -qi microsoft /proc/version 2>/dev/null; then
+                printf "%s" "$text" | clip.exe
+            elif [ -n "$WAYLAND_DISPLAY" ]; then
+                printf "%s" "$text" | wl-copy
+            elif [ -n "$DISPLAY" ]; then
+                printf "%s" "$text" | xclip -selection clipboard 2>/dev/null \
+                    || printf "%s" "$text" | xsel --clipboard --input 2>/dev/null
+            fi ;;
+        MINGW*|CYGWIN*|MSYS*)
+            printf "%s" "$text" | clip ;;
+    esac
+}
+
 display_password(){
     local password="$1"
-    echo "$password"
-    read -p "Press enter to continue"
-    clear   
+    local timeout=30
+
+    _clipboard "$password"
+    echo "Password copied to clipboard (clears in ${timeout}s)."
+    read -p "Press enter to continue..."
+    clear
+    { sleep "$timeout" && _clipboard; } &
 }
 
 retrieve_password(){
