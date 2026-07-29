@@ -17,9 +17,10 @@ show_menu(){
     echo "2. Retrieve Password"
     echo "3. List Accounts"
     echo "4. Delete Account"
-    echo "5. Exit"
+    echo "5. Change Password"
+    echo "0. Exit"
 
-    echo -n "Please select an option (1-4): "
+    echo -n "Please select an option (0-5): "
 
     read option
     case $option in
@@ -40,6 +41,11 @@ show_menu(){
             delete_account
             ;;
         5)
+            echo "You chose: 'Change Password'."
+            change_password "$MASTER_PASSWORD"
+            ;;
+
+        0)
             echo "Exiting..."
             exit 0
             ;;

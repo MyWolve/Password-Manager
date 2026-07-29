@@ -88,6 +88,7 @@ decrypt_password(){
     fi
 }
 
+# NOTE: This only works by appending a new blank copy/paste to the clipboard. Erasing the clipboard history would require elevated privleges in most cases.
 _clipboard(){
     local text="${1:-}"
     case "$(uname -s)" in
@@ -109,10 +110,10 @@ _clipboard(){
 
 display_password(){
     local password="$1"
-    local timeout=30
+    local timeout=10
 
     _clipboard "$password"
-    echo "Password copied to clipboard (clears in ${timeout}s)."
+    echo "Password copied to clipboard (clears in ${timeout}s from pressing enter)."
     read -p "Press enter to continue..."
     clear
     { sleep "$timeout" && _clipboard; } &
@@ -195,4 +196,74 @@ delete_account(){
             fi
         fi
     done
+}
+
+change_password(){
+    if [ -z "$(ls data/passwords/)" ]
+    then
+        echo "You don't have any passwords to change. Consider creating one!"
+        return 1
+    fi
+    while true; do
+        local master="$1"
+        echo "Please confirm master password to continue: (enter 'q' to exit)"
+        read pwd
+        if [ $pwd == $master ]
+        then
+            echo "Master password confirmed. Continuing..."
+            break
+        elif [ $pwd == 'q' ]
+        then
+            echo "Exiting..."
+            return 0
+        else
+            echo "That's not correct. Try again!"
+        fi
+    done
+        while true; do
+        echo "Please enter an account name: (enter 'q' to exit)"
+        read accName
+        if [ $accName == 'q' ]
+        then
+            echo "Exiting..."
+            return 0
+        elif [ ! -f "data/passwords/$accName" ]
+            then
+                echo "Account $accName does not exist. Try again? (y/n)"
+                read user
+                if [ $user == 'y' ]
+                then
+                    continue
+                else
+                    echo "Exiting..."
+                    return 0
+                fi
+            else
+                echo "Account $accName found. Are you sure you want to change this password? (y/n)"
+                read user
+                if [ $user == 'y' ]
+                then
+                    echo "Are you sure? This is irreversible! (y/n)"
+                    read user
+                    if [ $user == 'y' ]
+                    then
+                        echo "Deleting $accName..."
+                        rm data/passwords/$accName
+                        echo "Changing $accName password..."
+                        
+                        local new_password=$(generate_password)
+                        local encrypted_password=$(encrypt_password $master $new_password)
+                        echo "$encrypted_password" > "data/passwords/$accName"
+                        echo "Succesfully overwritten $accName"
+
+                    else
+                        echo "Exiting..."
+                        return 0
+                    fi
+                else
+                    echo "Exiting..."
+                    return 0
+                fi
+            fi
+        done
 }
