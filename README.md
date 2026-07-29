@@ -10,5 +10,7 @@ What's next:
 * Implement main() function for better readability, ease-of-use of program
 * Case Sensitivity for account generation
 * ~~Secure removal / deletion of passwords~~ ✅
+* ~~Change password~~ ✅
 * Change Master Password (Decrypt and then Re-encrypt passwords securely)
+* Multiple accounts / multiple Master passwords
 * ~~Automatic clipboard cleansing~~ ✅
