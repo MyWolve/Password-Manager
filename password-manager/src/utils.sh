@@ -5,7 +5,11 @@ list_accounts(){
         echo "No accounts available. Try creating one!"
         return 1;
     else
-        echo $(ls -l data/passwords)
+        echo "--------------------------------"
+        echo $(ls -lC data/passwords)
+        echo "--------------------------------"
+        echo "Press any key to continue..."
+        read wait
     fi
 }
 
@@ -29,9 +33,11 @@ new_password(){
     local master="$1"
     while true; do
         echo "Please enter an account name (exit with 'q'): "
-        read user
-
-        if [ "$user" == "q" ]
+        read user extra
+        if [ -n "$extra" ]
+        then
+            echo "Please enter names as one word -- (consider '_' or '-' as delimiters)"
+        elif [ "$user" == "q" ]
         then
             echo "Returning to main menu..."
             return 0
@@ -128,8 +134,11 @@ retrieve_password(){
     fi
     while true; do
         echo "Please enter an account name: "
-        read accName
-        if [ ! -f "data/passwords/$accName" ]
+        read accName extra
+        if [ -n "$extra" ]
+        then
+            echo "Please enter names as one word -- (consider '_' or '-' as delimiters)"
+        elif [ ! -f "data/passwords/$accName" ]
         then
             echo "Account $accName does not exist. Try again? (y/n)"
             read user
@@ -165,8 +174,11 @@ delete_account(){
     fi
     while true; do
         echo "Please enter an account name: (enter 'q' to exit)"
-        read accName
-        if [ $accName == 'q' ]
+        read accName extra
+        if [ -n "$extra" ]
+        then
+            echo "Please enter names as one word -- (consider '_' or '-' as delimiters)"
+        elif [ $accName == 'q' ]
         then
             echo "Exiting..."
             return 0
@@ -207,8 +219,11 @@ change_password(){
     while true; do
         local master="$1"
         echo "Please confirm master password to continue: (enter 'q' to exit)"
-        read pwd
-        if [ $pwd == $master ]
+        read pwd extra
+        if [ -n "$extra" ]
+        then
+            echo "Please enter names as one word -- (consider '_' or '-' as delimiters)"
+        elif [ $pwd == $master ]
         then
             echo "Master password confirmed. Continuing..."
             break
@@ -222,8 +237,11 @@ change_password(){
     done
         while true; do
         echo "Please enter an account name: (enter 'q' to exit)"
-        read accName
-        if [ $accName == 'q' ]
+        read accName extra
+        if [ -n "$extra" ]
+        then
+            echo "Please enter names as one word -- (consider '_' or '-' as delimiters)"
+        elif [ $accName == 'q' ]
         then
             echo "Exiting..."
             return 0
@@ -240,8 +258,11 @@ change_password(){
                 fi
             else
                 echo "Account $accName found. Are you sure you want to change this password? (y/n)"
-                read user
-                if [ $user == 'y' ]
+                read user extra
+                if [ -n "$extra" ]
+                then
+                    echo "Please enter names as one word -- (consider '_' or '-' as delimiters)"
+                elif [ $user == 'y' ]
                 then
                     echo "Are you sure? This is irreversible! (y/n)"
                     read user
